@@ -55,6 +55,7 @@ public class EmpDaoImp implements EmpDao{
         }
         return emps;
     }
+
     @Override
     public EmpDto findById(int empno) throws Exception {
         EmpDto emp=null;
@@ -92,16 +93,41 @@ public class EmpDaoImp implements EmpDao{
 
     @Override
     public int update(EmpDto emp) throws Exception {
-        return 0;
+        int excute=0;
+        String sql="UPDATE EMP SET ENAME=?, JOB=?, HIREDATE=?, SAL=?, COMM=?, DEPTNO=?, MGR=? WHERE EMPNO=?";
+        try(PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setString(1,emp.getEname());
+            ps.setString(2,emp.getJob());
+            ps.setDate(3,emp.getHiredate());
+            ps.setObject(4,emp.getSal());
+            ps.setObject(5,emp.getComm());
+            ps.setObject(6,emp.getDeptno());
+            ps.setObject(7,emp.getMgr());
+            ps.setInt(8,emp.getEmpno());
+            excute=ps.executeUpdate();
+        }
+        return excute;
     }
 
     @Override
     public int delete(int empno) throws Exception {
-        return 0;
+        int excute=0;
+        String sql="DELETE FROM EMP WHERE EMPNO=?";
+        try (PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1,empno);
+            excute=ps.executeUpdate();
+        }
+        return excute;
     }
 
     @Override
     public int updateMgrSetNullByMgr(int empno) throws Exception {
-        return 0;
+        int excute=0;
+        String sql="UPDATE EMP SET MGR=NULL WHERE MGR=?";
+        try(PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setInt(1,empno);
+            excute=ps.executeUpdate();
+        }
+        return excute;
     }
 }
