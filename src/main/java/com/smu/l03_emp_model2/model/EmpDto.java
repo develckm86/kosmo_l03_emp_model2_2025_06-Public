@@ -9,8 +9,8 @@ public class EmpDto {
 //MGR
 //HIREDATE
 //SAL
-    private int empno;
-    private String ename;
+    private int empno; //Pk
+    private String ename; //not Null
     private String job;
     private Integer mgr; //fk Emp.empno
     private Double sal;
