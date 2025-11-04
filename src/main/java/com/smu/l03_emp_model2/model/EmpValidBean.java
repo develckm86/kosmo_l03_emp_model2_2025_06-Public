@@ -39,7 +39,8 @@ public class EmpValidBean {
     }
     public void setJob(String job) {
         //null 일수도 있는 필드인데 null이면 공백  ""
-        if(job==null || job.isEmpty()) job=null;
+        //"",  "  111" , "    "
+        if(job!=null && job.isEmpty()) job=null;
         this.job = job;
     }
 
@@ -64,7 +65,17 @@ public class EmpValidBean {
         return sal;
     }
 
-    public void setSal(Double sal) {
+    public void setSal(String salStr)throws IllegalArgumentException {
+        Double sal = null;
+        if(salStr!=null && !salStr.isEmpty()){
+            //"13","십삼" ,"13.0 ", " 13", " 13 "
+            salStr=salStr.trim();
+            try {
+                sal=Double.parseDouble(salStr);
+            }catch (NumberFormatException e){
+                throw new IllegalArgumentException("급여는 실수로 입력해야합니다.");
+            }
+        }
         this.sal = sal;
     }
 
@@ -72,7 +83,17 @@ public class EmpValidBean {
         return comm;
     }
 
-    public void setComm(Double comm) {
+    public void setComm(String commStr) throws IllegalArgumentException {
+        Double comm=null; //기본값==else
+        if(commStr!=null && !commStr.isEmpty()){
+            try {
+                comm=Double.parseDouble(commStr);
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+                throw new IllegalArgumentException("커미션은 실수입니다.");
+            }
+        }
+
         this.comm = comm;
     }
 
@@ -80,7 +101,16 @@ public class EmpValidBean {
         return deptno;
     }
 
-    public void setDeptno(Integer deptno) {
+    public void setDeptno(String deptnoStr)throws IllegalArgumentException {
+        Integer deptno=null;
+        if(deptnoStr!=null && !deptnoStr.isEmpty()){
+            try {
+                deptno=Integer.parseInt(deptnoStr);
+            }catch (NumberFormatException e){
+                e.printStackTrace();
+                throw new IllegalArgumentException("부서번호는 수입니다.");
+            }
+        }
         this.deptno = deptno;
     }
 

@@ -1,5 +1,7 @@
 package com.smu.l03_emp_model2.controller;
 
+import com.smu.l03_emp_model2.model.DBFactory;
+import com.smu.l03_emp_model2.model.EmpService;
 import com.smu.l03_emp_model2.model.EmpValidBean;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,6 +12,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @WebServlet("/emp/register.do")
 public class EmpRegisterController extends HttpServlet {
@@ -35,6 +39,37 @@ public class EmpRegisterController extends HttpServlet {
             //dto(저장전용) bean(저장+유효성) : 객체에 필드를 저장
             EmpValidBean empValidBean=new EmpValidBean();
             empValidBean.setEmpno(empnoStr);
+            empValidBean.setSal(salStr);
+            empValidBean.setEname(ename);
+            empValidBean.setMgr(mgrStr);
+            empValidBean.setHiredate(hiredateStr);
+            empValidBean.setComm(commStr);
+            empValidBean.setJob(job);
+            empValidBean.setDeptno(deptnoStr);
+
+            try (Connection conn= DBFactory.getConn()){
+                
+            }catch (ClassNotFoundException e){
+                e.printStackTrace();
+            }catch (SQLException e){
+                e.printStackTrace();
+                //pk,fk,check,not null, 형식(길이,데이트포맷,수),
+                //SQLException.getErrorCode() : 쿼리 실행시 발생할 수 있는 에러의 상태 번호
+                //1 :"(PK 제약조건)사번이 이미 존재합니다.";
+                //1400 : "(NOT NULL 제약조건)필수 입력값이 누락되었습니다.";
+                //2291 :"(FK 제약조건)부서번호가 존재하지 않습니다.";
+                //2292 : "(FK 제약조건)참조하는 상사부서라 삭제할 수 없습니다.";
+                //12899 : "입력값이 컬럼의 최대 길이를 초과했습니다.";
+                //(12514,12541,122154) : "데이터베이스를 접속할 수 없습니다. 다시 시도하세요.";
+                int errorCode=e.getErrorCode();
+            }catch (Exception e){
+                e.printStackTrace();
+                resp.sendError(500);
+            }
+
+
+
+
         }catch (IllegalArgumentException e){
             e.printStackTrace();
             //resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
